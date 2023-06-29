@@ -27,7 +27,7 @@ userForm.loginFormCallback = data => {
 
       if (response.success) {
         location.reload();
-      } else {
+      } else { 
         userForm.setRegisterErrorMessage(response.error);
        }
     });
