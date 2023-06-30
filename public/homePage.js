@@ -1,5 +1,3 @@
-const { response } = require("express");
-
 // Intro
 const logoutButton = new LogoutButton();
 
@@ -80,22 +78,46 @@ moneyManager.addMoneyCallback = (data) => {
 
 
 // FavoritesWidget
-const favoritesWidjet = FavoritesWidget();
+const favoritesWidget = new FavoritesWidget();
 
-favoritesWidjet.getFavorites = (data) => {
+favoritesWidget.getFavorites = (data) => {
   ApiConnector.getFavorites((response) => {
     if (response.success) {
-      favoritesWidjet.fillTable(response);
-      favoritesWidjet.clearTable();
-      favoritesWidjet.updateUsersList();
+      favoritesWidget.fillTable(response.data);
+      favoritesWidget.clearTable();
+      favoritesWidget.updateUsersList();
     } else {
-      favoritesWidjet.setMessage(response.error);
+      favoritesWidget.setMessage(response.error);
     }
   });
 };
 
-favoritesWidjet.addUserCallback = (data) => {
-  ApiConnector.addUserToFavorites((response) => {
-    
-  })
-}
+favoritesWidget.addUserCallback = (data) => {
+  ApiConnector.addUserToFavorites(data, (response) => {
+    if (response.success) {
+      favoritesWidget.setMessage(true, "Пользователь успешно добавлен в избранное");
+      favoritesWidget.clearTable();
+      favoritesWidget.fillTable(response.data);
+      favoritesWidget.updateUsersList();
+    } else {
+      favoritesWidget.setMessage(false, response.error);
+    }
+  });
+};
+
+
+favoritesWidget.removeUserCallback = (data) => {
+  ApiConnector.removeUserFromFavorites(data, (response) => {
+    if(response.success) {
+      favoritesWidget.setMessage(true, "Пользователь был удален из избранного");
+      favoritesWidget.clearTable();
+      favoritesWidget.fillTable(response.data);
+      favoritesWidget.updateUsersList();
+    } else {
+      favoritesWidget.setMessage(false, response.error);
+    }
+  });
+};
+
+
+// 
