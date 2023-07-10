@@ -92,6 +92,7 @@ favoritesWidget.getFavorites = (data) => {
   });
 };
 
+
 favoritesWidget.addUserCallback = (data) => {
   ApiConnector.addUserToFavorites(data, (response) => {
     if (response.success) {
